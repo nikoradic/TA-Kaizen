@@ -1,0 +1,157 @@
+@page "/rax-vagnar"
+
+<PageTitle>RAX & Vagnar</PageTitle>
+
+<div class="sid-huvud">
+    <h1>RAX & Vagnar</h1>
+    <button type="button" class="btn btn-outline-primary btn-sm karta-knapp" @onclick="OppnaKarta">
+        <span aria-hidden="true">🗺️</span> Layoutkarta
+    </button>
+</div>
+
+<p class="intro">
+    Skriv in ett artikelnummer och se direkt vilken vagn som är rätt.
+    Sidan använder påhittad exempeldata.
+</p>
+
+<div class="search">
+    <label for="artikel-sok" class="form-label">Artikelnummer</label>
+    <input id="artikel-sok"
+           class="form-control"
+           type="search"
+           inputmode="numeric"
+           placeholder="T.ex. 300572"
+           @bind="sokText"
+           @bind:event="oninput" />
+</div>
+
+@if (valtUppdrag is not null)
+{
+    <p class="bekraftelse" role="status">✓ Uppdrag @valtUppdrag valt</p>
+}
+
+<div class="table-responsive table-card">
+    <table class="table table-striped table-hover align-middle rax-table">
+        <caption>Uppdrag och rätt vagn (exempeldata)</caption>
+        <thead>
+            <tr>
+                <th scope="col">Uppdrag</th>
+                <th scope="col">Ställage</th>
+                <th scope="col">Stuv</th>
+                <th scope="col">Nivå</th>
+                <th scope="col">Artikelnummer</th>
+                <th scope="col">Typ</th>
+                <th scope="col">Rätt vagn</th>
+                <th scope="col">Färg</th>
+                <th scope="col" class="text-end">PSaldo</th>
+                <th scope="col">Åtgärd</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rad in FiltreradeRader)
+            {
+                <tr class="@(rad.Uppdrag == valtUppdrag ? "table-active" : null)">
+                    <td>@rad.Uppdrag</td>
+                    <td>@rad.Stallage</td>
+                    <td>@rad.Stuv</td>
+                    <td>@rad.Niva</td>
+                    <td class="artikel">@rad.Artikelnummer</td>
+                    <td>@rad.Typ</td>
+                    <td>
+                        <span class="vagn-badge vagn-@(rad.Vagnserie)">
+                            <span class="vagn-namn">Vagn @rad.VagnNummer</span>
+                            <span class="vagn-serie">– @(rad.Vagnserie)-serien</span>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="farg-prick vagn-@(rad.Vagnserie)" aria-hidden="true"></span>
+                        @rad.Farg
+                    </td>
+                    <td class="text-end">@rad.PSaldo</td>
+                    <td>
+                        <button type="button" class="ta-knapp" @onclick="() => TaUppgift(rad.Uppdrag)">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z" />
+                            </svg>
+                            Ta uppgift
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (!FiltreradeRader.Any())
+{
+    <p class="tom" role="status">Inget uppdrag hittades för "@sokText".</p>
+}
+
+@if (visaKarta)
+{
+    <div class="karta-bakgrund">
+        <div class="karta-popup" role="dialog" aria-modal="true" aria-labelledby="karta-titel">
+            <div class="karta-topp">
+                <h2 id="karta-titel">Layoutkarta (exempel)</h2>
+                <button type="button" class="btn-close" aria-label="Stäng" @onclick="StangKarta"></button>
+            </div>
+
+            <img src="/Images/layoutkarta.png"
+                 alt="Layoutkarta över lagret med RAX-områden"
+                 class="karta-bild" />
+
+            <p class="karta-info">
+                Kartan är ett hjälpmedel för att hitta rätt RAX.
+            </p>
+        </div>
+    </div>
+}
+
+@code {
+    // Texten som användaren skriver i sökfältet.
+    private string sokText = "";
+
+    // Styr om layoutkartan visas.
+    private bool visaKarta = false;
+
+    private void OppnaKarta() => visaKarta = true;
+    private void StangKarta() => visaKarta = false;
+
+    // Vilket uppdrag användaren har valt (null = inget valt än).
+    private string? valtUppdrag;
+
+    private void TaUppgift(string uppdrag) => valtUppdrag = uppdrag;
+
+    // Påhittad exempeldata – ingen databas.
+    private readonly List<RaxRad> rader = new()
+    {
+        new("U-001", "A01", "3", "1", "100245", "Kartong",  1000, "Blå",  24, "Hämta"),
+        new("U-002", "B04", "1", "2", "200318", "Back",     2000, "Grön", 12, "Hämta"),
+        new("U-003", "C07", "5", "1", "300572", "Långgods", 3000, "Gul",   6, "Fyll på"),
+        new("U-004", "D02", "2", "3", "400109", "Pall",     4000, "Lila",  3, "Flytta"),
+        new("U-005", "A09", "4", "2", "100876", "Kartong",  1000, "Blå",  18, "Hämta"),
+    };
+
+    // Visar alla rader om sökfältet är tomt, annars bara de som matchar.
+    private IEnumerable<RaxRad> FiltreradeRader =>
+        string.IsNullOrWhiteSpace(sokText)
+            ? rader
+            : rader.Where(r => r.Artikelnummer.Contains(sokText.Trim()));
+
+    // En rad i tabellen.
+    private record RaxRad(
+        string Uppdrag,
+        string Stallage,
+        string Stuv,
+        string Niva,
+        string Artikelnummer,
+        string Typ,
+        int Vagnserie,
+        string Farg,
+        int PSaldo,
+        string Atgard)
+    {
+        // 1000 → 1, 2000 → 2, 3000 → 3, 4000 → 4
+        public int VagnNummer => Vagnserie / 1000;
+    }
+}

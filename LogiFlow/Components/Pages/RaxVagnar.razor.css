@@ -1,0 +1,239 @@
+.intro {
+    color: #4a5568;
+    max-width: 60ch;
+}
+
+.search {
+    max-width: 20rem;
+    margin-bottom: 1.5rem;
+}
+
+    .search .form-label {
+        font-weight: 600;
+    }
+
+/* Vitt kort runt tabellen */
+.table-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.rax-table {
+    margin-bottom: 0;
+}
+
+.rax-table td {
+    padding: 0.85rem 1rem;
+    border-color: #e2e8f0;
+    white-space: nowrap;
+}
+
+.rax-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.rax-table caption {
+    caption-side: top;
+    color: #4a5568;
+    padding: 0.75rem 1rem;
+}
+
+.rax-table thead th {
+    background-color: #0b2545;   /* samma mörkblå som headern */
+    color: #ffffff;
+    font-weight: 600;
+    white-space: nowrap;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.85rem 1rem;
+    border-bottom: 0;
+}
+
+.artikel {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Rätt vagn: den mest synliga informationen i raden */
+.vagn-badge {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.5rem;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.vagn-namn {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.vagn-serie {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Liten färgprick bredvid färgens namn */
+.farg-prick {
+    display: inline-block;
+    width: 0.9rem;
+    height: 0.9rem;
+    margin-right: 0.4rem;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    vertical-align: middle;
+}
+
+/* En färg per vagnserie (påhittade exempelfärger) */
+.vagn-1000 { background-color: #1d4ed8; }                  /* blå */
+.vagn-2000 { background-color: #15803d; }                  /* grön */
+.vagn-3000 { background-color: #fbbf24; color: #1f2937; }  /* gul, mörk text */
+.vagn-4000 { background-color: #7e22ce; }                  /* lila */
+
+.tom {
+    color: #4a5568;
+    font-style: italic;
+}
+
+/* Rubrik och knapp på samma rad */
+.sid-huvud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.karta-knapp {
+    white-space: nowrap;
+}
+
+/* Mörk bakgrund bakom popupen, täcker hela skärmen */
+.karta-bakgrund {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(11, 37, 69, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 1050;
+}
+
+/* Själva popup-rutan */
+.karta-popup {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 60rem;
+    padding: 1.25rem;
+}
+
+.karta-topp {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+    .karta-topp h2 {
+        font-size: 1.25rem;
+        margin: 0;
+    }
+
+/* Kartan: 4 kolumner */
+.karta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+
+.zon {
+    background-color: #e8eef6;
+    border: 2px solid #0b2545;
+    border-radius: 0.5rem;
+    padding: 1.5rem 0.5rem;
+    text-align: center;
+    font-weight: 700;
+    color: #0b2545;
+}
+
+.gang {
+    grid-column: 1 / -1;          /* hela bredden */
+    background-color: #f1f5f9;
+    border: 2px dashed #94a3b8;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    text-align: center;
+    color: #4a5568;
+}
+
+.port {
+    grid-column: span 2;          /* halva bredden */
+    background-color: #0b2545;
+    color: #ffffff;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.karta-info {
+    margin: 1rem 0 0;
+    color: #4a5568;
+    font-size: 0.9rem;
+}
+
+/* Layoutbilden i popupen */
+.karta-bild {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 70vh;        /* aldrig högre än 70 % av skärmen */
+    object-fit: contain;     /* hela bilden syns, inget beskärs */
+    border-radius: 0.5rem;
+}
+
+/* Knappen "Ta uppgift": neutral, samma på alla rader */
+.ta-knapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    background-color: #ffffff;
+    color: #374151;              /* mörkgrå */
+    border: 1px solid #d1d5db;   /* diskret grå kant */
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+    .ta-knapp:hover {
+        background-color: #f3f4f6;
+        border-color: #9ca3af;
+    }
+
+    .ta-knapp:focus-visible {
+        outline: 2px solid #0b2545;
+        outline-offset: 2px;
+    }
+
+/* Bekräftelsen: neutral grå, inte en vagnfärg */
+.bekraftelse {
+    display: inline-block;
+    padding: 0.5rem 0.9rem;
+    margin-bottom: 1rem;
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    color: #374151;
+    font-weight: 600;
+}
